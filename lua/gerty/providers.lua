@@ -51,7 +51,9 @@ M.pi = {
   transport = "cli",
   capabilities = { agentic = true },
   build_command = function(provider, opts)
-    local cmd = { "pi", "--print", "--approve" }
+    -- --no-session: every gerty call is a one-shot, and a saved session per
+    -- call floods `pi`'s history (and tools that read it, e.g. lazyrecall)
+    local cmd = { "pi", "--print", "--approve", "--no-session" }
     if opts and opts.read_only then
       -- `bash` has to go too: denying only edit/write still leaves the model
       -- a shell to write files with, which it will happily use
