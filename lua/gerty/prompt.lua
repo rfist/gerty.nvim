@@ -310,6 +310,18 @@ end
 --- model lose the end of the selection; the banner above is too far away by
 --- then to still be doing any work.
 ---
+--- That tail turned out not to be enough on its own. A later report -- a line
+--- opening with a German „…“ quote, then narration, then a second quote --
+--- still came back as the first sentence alone, 3 times in 6 with gemma-4-e4b
+--- and `finish_reason` "stop" both times, so nothing downstream could tell it
+--- was short. Naming the structure in `translate`'s tail fixes it: "the text
+--- may contain quotation marks; translate the narration outside the quotes as
+--- well as the speech inside them" scores 6/6 on the reported line and leaves
+--- quote-initial, quote-free and quote-heavy lines unchanged (12 further
+--- samples), with the quotation marks themselves preserved slightly MORE often
+--- than before. It sits before the output-language sentence so that sentence
+--- stays last, which is where the paragraph above wants it.
+---
 --- @param opts { before: string, after: string, selection: string }
 --- @param tail string|nil
 --- @return string
@@ -358,7 +370,9 @@ function M.translate(opts)
       opts,
       string.format(
         "Translate the whole of that text, every sentence of it, from the "
-          .. "first word to the last. Write the translation in %s.",
+          .. "first word to the last. The text may contain quotation marks; "
+          .. "translate the narration outside the quotes as well as the speech "
+          .. "inside them, keeping every sentence. Write the translation in %s.",
         M.language_name(opts.target)
       )
     ),
