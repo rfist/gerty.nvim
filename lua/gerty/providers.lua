@@ -73,7 +73,14 @@ M.claude = {
   transport = "cli",
   capabilities = { agentic = true },
   build_command = function(provider, opts)
-    local cmd = { "claude", "--dangerously-skip-permissions", "--print" }
+    -- --no-session-persistence: same reason as pi's --no-session, each call is
+    -- a one-shot that shouldn't land in the user's session history
+    local cmd = {
+      "claude",
+      "--dangerously-skip-permissions",
+      "--print",
+      "--no-session-persistence",
+    }
     if opts and opts.read_only then
       -- deny rules win over --dangerously-skip-permissions. Bash has to be on
       -- the list: with only the edit tools denied the model reaches for a

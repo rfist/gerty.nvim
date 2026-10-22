@@ -10,7 +10,7 @@ Notable changes per release. Dates are ISO. This project is pre-1.0: minor versi
 
 ### Fixed
 
-- Calls through the `pi` provider no longer save a session file. Gerty passes `--no-session`, so one-shot edits and explanations stop piling up in `~/.pi/agent/sessions` and in tools that list those sessions.
+- Calls through the `pi` and `claude` providers no longer save a session file. Gerty passes `--no-session` (and `--no-session-persistence` to `claude`), so one-shot edits and explanations stop piling up in `~/.pi/agent/sessions` and in tools that list those sessions.
 - `translate` no longer stops after the first sentence of a line that opens with a quotation mark. The closing instruction now names the structure — narration outside the quotes, speech inside — which took the reported line from 3 complete translations in 6 to 6 in 6 on `gemma-4-e4b`, with no change on quote-free or quote-heavy lines.
 - The explanation float of a skilled `replace` no longer closes itself the moment it opens. When the replacement was shorter than the text under the cursor, Neovim's delayed `CursorMoved` for that clamp was mistaken for a user move; the float now only dismisses on a move away from where the edit left the cursor.
 
